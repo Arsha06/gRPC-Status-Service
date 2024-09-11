@@ -1,0 +1,33 @@
+syntax = "proto3";
+option java_multiple_files = true;
+option java_package = "com.example.grpc";
+
+package status;
+
+// Define the enum for the order status
+enum UpdatedOrderStatus {
+  PLACED = 0;   // Default value
+  ACCEPTED = 1;
+  PICKED_UP = 2;
+  DELIVERED = 3;
+}
+
+// Request message for updating order status
+message UpdatedOrderStatusRequest {
+  string orderId = 1;     // Order ID
+  string userId = 2;      // User ID
+  UpdatedOrderStatus status = 3; // Status of the order
+}
+
+// Response message to return updated order details
+message UpdatedOrderStatusResponse {
+  string orderId = 1;     // Order ID
+  string userId = 2;      // User ID
+  UpdatedOrderStatus status = 3; // Updated status of the order
+}
+
+// Service definition for updating order status
+service UpdatedOrderStatusService {
+  // RPC for updating the status of an order
+  rpc UpdatedOrderStatus(UpdatedOrderStatusRequest) returns (UpdatedOrderStatusResponse);
+}
