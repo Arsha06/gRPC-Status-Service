@@ -1,2 +1,2 @@
 # gRPC-Status-Service
-gRPC service for Updating the status
+gRPC server for Updating the status
