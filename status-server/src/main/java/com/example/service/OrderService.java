@@ -21,7 +21,7 @@ public class OrderService {
         if (order != null) {
             // Set the status from the gRPC request (which is an enum)
             order.setStatus(request.getStatus());
-            order.setUpdatedAt(LocalDateTime.now());
+
 
             // Save the updated order back to the repository
             orderRepository.save(order);

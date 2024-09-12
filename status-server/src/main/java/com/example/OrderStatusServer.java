@@ -66,22 +66,29 @@ public class OrderStatusServer implements CommandLineRunner {
             if (order != null) {
                 order.setStatus(status); // No need for valueOf as status is an enum
                 orderRepository.save(order);
+
+                // The status is already an enum, no need to convert from string
+                UpdatedOrderStatus updatedStatus = order.getStatus();
+
+                // Build the response
+                UpdatedOrderStatusResponse response = UpdatedOrderStatusResponse.newBuilder()
+                        .setOrderId(order.getOrderId())
+                        .setUserId(order.getUserId())
+                        .setStatus(updatedStatus) // Convert stored string back to enum
+
+                        .build();
+
+
+                // Send the response back to the client
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+                System.out.println("Order ID: " + orderId + ", User ID: " + userId + " updated with status: " + status);
+
             } else {
+                // If order not found, respond with an error
                 System.err.println("Order not found: " + orderId);
+                responseObserver.onError(new RuntimeException("Order not found"));
             }
-
-            // Build the response
-            UpdatedOrderStatusResponse response = UpdatedOrderStatusResponse.newBuilder()
-                    .setOrderId(orderId)
-                    .setUserId(userId)
-                    .setStatus(status)
-                    .build();
-
-            System.out.println("Order ID: " + orderId + ", User ID: " + userId + " updated with status: " + status);
-
-            // Send the response back to the client
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
         }
     }
 }

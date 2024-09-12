@@ -26,11 +26,6 @@ public class Order {
     @Enumerated(EnumType.STRING) // Ensure status is stored as a string
     private UpdatedOrderStatus status = UpdatedOrderStatus.PLACED; // Default status
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
 
 }
