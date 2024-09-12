@@ -24,7 +24,7 @@
     <modules>
         <module>proto</module>
 		<module>status-server</module>
-		<module>status-client</module>
+
 	</modules>
     <scm>
 		<connection/>
@@ -46,6 +46,22 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.2.23</version> <!-- Use the latest stable version -->
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-core</artifactId>
+			<version>1.51.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-netty-shaded</artifactId>
+			<version>1.51.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
