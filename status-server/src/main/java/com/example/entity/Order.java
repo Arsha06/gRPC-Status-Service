@@ -1,5 +1,5 @@
 package com.example.entity;
-
+import java.util.UUID;
 import com.example.grpc.UpdatedOrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,10 +17,10 @@ public class Order {
     private Long id;
 
     @Column(name = "order_id", unique = true, nullable = false)
-    private String orderId;
+    private UUID orderId;
 
     @Column(name = "user_id", nullable = false)
-    private String userId;
+    private UUID userId;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING) // Ensure status is stored as a string

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import jakarta.transaction.Transactional;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @SpringBootApplication
 public class OrderStatusServer implements CommandLineRunner {
@@ -57,11 +58,16 @@ public class OrderStatusServer implements CommandLineRunner {
         @Override
         @Transactional
         public void updatedOrderStatus(UpdatedOrderStatusRequest request, StreamObserver<UpdatedOrderStatusResponse> responseObserver) {
-            String orderId = request.getOrderId();
-            String userId = request.getUserId();
-            UpdatedOrderStatus status = request.getStatus();
+
+            try {
+                // Convert orderId and userId from String to UUID
+                UUID orderId = UUID.fromString(request.getOrderId());
+                UUID userId = UUID.fromString(request.getUserId());
+
+                UpdatedOrderStatus status = request.getStatus();
 
             // Update the order status in the database
+
             Order order = orderRepository.findByOrderId(orderId);
             if (order != null) {
                 order.setStatus(status); // No need for valueOf as status is an enum
@@ -72,8 +78,8 @@ public class OrderStatusServer implements CommandLineRunner {
 
                 // Build the response
                 UpdatedOrderStatusResponse response = UpdatedOrderStatusResponse.newBuilder()
-                        .setOrderId(order.getOrderId())
-                        .setUserId(order.getUserId())
+                        .setOrderId(order.getOrderId().toString())
+                        .setUserId(order.getUserId().toString())
                         .setStatus(updatedStatus) // Convert stored string back to enum
 
                         .build();
@@ -89,6 +95,12 @@ public class OrderStatusServer implements CommandLineRunner {
                 System.err.println("Order not found: " + orderId);
                 responseObserver.onError(new RuntimeException("Order not found"));
             }
+            } catch (IllegalArgumentException e) {
+                System.err.println("Invalid UUID format for orderId or userId: " + e.getMessage());
+            } finally {
+                responseObserver.onCompleted();
+            }
+
         }
     }
 }

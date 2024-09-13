@@ -7,7 +7,7 @@ import com.example.entity.Order;
 import com.example.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.UUID;
 import java.time.LocalDateTime;
 
 @Service
@@ -17,7 +17,15 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     public UpdatedOrderStatusResponse updateOrderStatus(UpdatedOrderStatusRequest request) {
-        Order order = orderRepository.findByOrderId(request.getOrderId());
+        UUID orderId = UUID.fromString(request.getOrderId());
+        UUID userId = UUID.fromString(request.getUserId());
+
+        Order order = orderRepository.findByOrderId(orderId);
+
+
+
+
+
         if (order != null) {
             // Set the status from the gRPC request (which is an enum)
             order.setStatus(request.getStatus());
@@ -28,8 +36,8 @@ public class OrderService {
 
             // Build and return the gRPC response
             return UpdatedOrderStatusResponse.newBuilder()
-                    .setOrderId(order.getOrderId())
-                    .setUserId(order.getUserId())
+                    .setOrderId(order.getOrderId().toString())
+                    .setUserId(order.getUserId().toString())
                     .setStatus(order.getStatus())  // Enum returned correctly
                     .build();
         } else {
