@@ -97,8 +97,9 @@ public class OrderStatusServer implements CommandLineRunner {
             }
             } catch (IllegalArgumentException e) {
                 System.err.println("Invalid UUID format for orderId or userId: " + e.getMessage());
-            } finally {
-                responseObserver.onCompleted();
+            } catch (Exception e) {
+                System.err.println("Error processing request: " + e.getMessage());
+                responseObserver.onError(e);
             }
 
         }
